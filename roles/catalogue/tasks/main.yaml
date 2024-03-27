@@ -21,12 +21,12 @@
 
 - name: DOWNLOAD APPLICATION CODE INTO APP DIRECTORY
   get_url:
-    url: https://roboshop-builds.s3.amazonaws.com/"{{ COMPONENT }}".zip
+    url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
     dest: /tmp
 
 - name: UNZIP APP CODE
   unarchive:
-    src: /tmp/"{{ COMPONENT }}".zip
+    src: /tmp/catalogue.zip
     dest: /app
     remote_src: yes
 
@@ -60,7 +60,7 @@
     state: present
 
 - name: VERIFY PRODUCTS COUNT
-  command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB(""{{ COMPONENT }}""); db.products.count()'
+  command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB("{{ COMPONENT }}"); db.products.count()'
   register: product_count
 
 - name: PRINT PRODUCT COUNT
