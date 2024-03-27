@@ -37,8 +37,8 @@
 
 - name: COPY CATALOGUE SERVICE FILE
   copy:
-    src: /home/centos/Anisible-Roboshop-Application/"{{ COMPONENT }}".service
-    dest: /etc/systemd/system/"{{ COMPONENT }}".service
+    src: /home/centos/Anisible-Roboshop-Application/{{ COMPONENT }}.service
+    dest: /etc/systemd/system/{{ COMPONENT }}.service
 
 - name: RELOAD SYSTEMD DAEMON
   ansible.builtin.systemd:
@@ -68,7 +68,7 @@
     msg: "Product Count: {{ product_count.stdout }}"
 
 - name: LOAD DATA INTO MONGODB
-  shell: mongo --host mongo.gonepudirobot.online < /app/schema/"{{ COMPONENT }}".js
+  shell: mongo --host mongo.gonepudirobot.online < /app/schema/{{ COMPONENT }}.js
   when: product_count.stdout == "0"
 
 - name: RESTART CATALOGUE SERVICE
