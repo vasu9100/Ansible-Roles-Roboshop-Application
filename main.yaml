@@ -1,7 +1,6 @@
 ---
-- name: INSTALLAING {{ COMPONENT }}
+- name: "INSTALLING {{ COMPONENT }}"
   hosts: "{{ COMPONENT }}"
   become: yes
   roles:
-  - "{{ COMPONENT }}"
-  
+    - "{{ COMPONENT }}"
