@@ -1,5 +1,5 @@
 - name: DISABLING NODE.JS MODULE
-  shell: "{{item}}"
+  shell: "{{ item }}"
   loop:
     - dnf module disable nodejs -y
     - dnf module enable nodejs:18 -y
@@ -21,12 +21,12 @@
 
 - name: DOWNLOAD APPLICATION CODE INTO APP DIRECTORY
   get_url:
-    url: https://roboshop-builds.s3.amazonaws.com/"{{ COMPONENT }}".zip
-    dest: /tmp
+    url: "https://roboshop-builds.s3.amazonaws.com/{{ COMPONENT }}.zip"
+    dest: /tmp/{{ COMPONENT }}.zip
 
 - name: UNZIP APP CODE
   unarchive:
-    src: /tmp/user.zip
+    src: "/tmp/{{ COMPONENT }}.zip"
     dest: /app
     remote_src: yes
 
@@ -37,8 +37,8 @@
 
 - name: COPY USER SERVICE FILE
   copy:
-    src: /home/centos/Anisible-Roboshop-Application/"{{ COMPONENT }}".service
-    dest: /etc/systemd/system/"{{ COMPONENT }}".service
+    src: /home/centos/Anisible-Roboshop-Application/{{ COMPONENT }}.service
+    dest: /etc/systemd/system/{{ COMPONENT }}.service
 
 - name: RELOAD SYSTEMD DAEMON
   ansible.builtin.systemd:
@@ -46,12 +46,12 @@
 
 - name: START USER SERVICE
   ansible.builtin.systemd:
-    name: "{{COMPONENT}}"
+    name: "{{ COMPONENT }}"
     state: started
 
 - name: COPY MONGO REPO FILE
   copy:
-    src: mongo.repo
+    src: /full/path/to/mongo.repo
     dest: /etc/yum.repos.d/mongo.repo
 
 - name: INSTALL MONGODB SHELL
@@ -60,7 +60,7 @@
     state: present
 
 - name: VERIFY USER COUNT
-  command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB("{{COMPONENT}}"); db.users.count()'
+  command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB("{{ COMPONENT }}"); db.users.count()'
   register: user_count
 
 - name: PRINT USER COUNT
@@ -68,10 +68,10 @@
     msg: "user Count: {{ user_count.stdout }}"
 
 - name: LOAD DATA INTO MONGODB
-  shell: mongo --host mongo.gonepudirobot.online < /app/schema/"{{COMPONENT}}".js
-  when: user_count.stdout == "0"
+  shell: mongo --host mongo.gonepudirobot.online < /app/schema/{{ COMPONENT }}.js
+  when: user_count.stdout|int == 0
 
 - name: RESTART USER SERVICE
   systemd:
-    name: "{{COMPONENT}}"
+    name: "{{ COMPONENT }}"
     state: restarted
