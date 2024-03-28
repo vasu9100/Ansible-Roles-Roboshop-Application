@@ -37,7 +37,7 @@
 
 - name: COPY USER SERVICE FILE
   copy:
-    src: /home/centos/Anisible-Roboshop-Application/{{ COMPONENT }}.service
+    src: "{{ COMPONENT }}.service"
     dest: /etc/systemd/system/{{ COMPONENT }}.service
 
 - name: RELOAD SYSTEMD DAEMON
