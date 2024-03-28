@@ -51,7 +51,7 @@
 
 - name: COPY MONGO REPO FILE
   copy:
-    src: /full/path/to/mongo.repo
+    src: mongo.repo
     dest: /etc/yum.repos.d/mongo.repo
 
 - name: INSTALL MONGODB SHELL
