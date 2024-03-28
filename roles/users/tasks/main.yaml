@@ -21,7 +21,7 @@
 
 - name: DOWNLOAD APPLICATION CODE INTO APP DIRECTORY
   get_url:
-    url: https://roboshop-builds.s3.amazonaws.com/{{COMPONENT}}.zip
+    url: https://roboshop-builds.s3.amazonaws.com/"{{ COMPONENT }}".zip
     dest: /tmp
 
 - name: UNZIP APP CODE
@@ -37,8 +37,8 @@
 
 - name: COPY USER SERVICE FILE
   copy:
-    src: /home/centos/Anisible-Roboshop-Application/{{COMPONENT}}.service
-    dest: /etc/systemd/system/user.service
+    src: /home/centos/Anisible-Roboshop-Application/"{{ COMPONENT }}".service
+    dest: /etc/systemd/system/"{{ COMPONENT }}".service
 
 - name: RELOAD SYSTEMD DAEMON
   ansible.builtin.systemd:
