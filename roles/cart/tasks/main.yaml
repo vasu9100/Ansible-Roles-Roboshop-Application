@@ -1,0 +1,55 @@
+- name: DISABLING NODE.JS MODULE
+  shell: "{{item}}"
+  loop:
+    - dnf module disable nodejs -y
+    - dnf module enable nodejs:18 -y
+    - dnf install nodejs -y
+
+- name: CONFIGURE APPLICATION USER
+  user:
+    name: roboshop
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /app
+    state: absent
+
+- name: CREATE APP DIRECTORY
+  file:
+    path: /app
+    state: directory
+
+- name: DOWNLOAD APPLICATION CODE INTO APP DIRECTORY
+  get_url:
+    url: "https://roboshop-builds.s3.amazonaws.com/{{ COMPONENT }}.zip"
+    dest: /tmp
+
+- name: UNZIP APP CODE
+  unarchive:
+    src: /tmp/{{ COMPONENT }}.zip
+    dest: /app
+    remote_src: yes
+
+- name: INSTALL NPM DEPENDENCIES
+  shell: npm install
+  args:
+    chdir: /app
+
+- name: COPY CART SERVICE FILE
+  copy:
+    src: "{{ COMPONENT }}.service"
+    dest: /etc/systemd/system/{{ COMPONENT }}.service
+
+- name: RELOAD SYSTEMD DAEMON
+  ansible.builtin.systemd:
+    daemon_reexec: yes
+
+- name: START cart SERVICE
+  ansible.builtin.systemd:
+    name: "{{ COMPONENT }}"
+    state: started
+
+- name: RESTART CART SERVICE
+  systemd:
+    name: "{{ COMPONENT }}"
+    state: restarted
