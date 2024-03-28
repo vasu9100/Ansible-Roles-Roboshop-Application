@@ -60,7 +60,7 @@
     state: present
 
 - name: VERIFY USER COUNT
-  command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB("{{ COMPONENT }}"); db.users.count()'
+  command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB("users"); db.users.count()'
   register: user_count
 
 - name: PRINT USER COUNT
