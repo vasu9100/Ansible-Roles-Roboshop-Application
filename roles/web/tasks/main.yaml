@@ -1,0 +1,50 @@
+- name: Install NGINX Server
+  dnf:
+    name: nginx
+    state: present
+
+- name: Set Start Time
+  ansible.builtin.shell: date +%Y-%m-%d_%H-%M-%S
+  register: current_time_result
+
+- name: Enable and Start NGINX
+  service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Download Frontend Code
+  get_url:
+    url: https://roboshop-builds.s3.amazonaws.com/web.zip
+    dest: /tmp    
+
+- name: Create Backup Folder
+  file:
+    path: "/tmp/backup_html_{{ current_time_result.stdout }}"
+    state: directory
+
+- name: Copy HTML Folder for Backup
+  copy:
+    src: "/usr/share/nginx/html"
+    dest: "/tmp/backup_html_{{ current_time_result.stdout }}"
+    remote_src: yes  
+  ignore_errors: yes  
+
+- name: Remove Old HTML Content
+  shell: rm -rf /usr/share/nginx/html/*
+
+- name: Extract New HTML Code
+  unarchive:
+    src: /tmp/web.zip
+    dest: /usr/share/nginx/html/
+    remote_src: yes
+
+- name: Copy Main Configuration File
+  copy:
+    src: roboshop.conf
+    dest: /etc/nginx/default.d/roboshop.conf
+
+- name: Restart NGINX Server
+  service:
+    name: nginx
+    state: restarted
