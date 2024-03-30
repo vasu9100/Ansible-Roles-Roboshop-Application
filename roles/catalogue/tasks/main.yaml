@@ -1,15 +1,15 @@
 - name: NODE JS tasks
-  import_roles:
+  import_role:
     name: common
     tasks_from: node
 
 - name: app-setup
-  import_roles:
+  import_role:
     name: common
     tasks_from: app-setup
 
 - name: SYSTEM STARTED SERVICES
-  import_roles:
+  import_role:
     name: common
     tasks_from: systemd
 
