@@ -1,7 +1,7 @@
 - name: NODE JS tasks
   import_roles:
     name: common
-    tasks_from: nodejs
+    tasks_from: node
 
 - name: app-setup
   import_roles:
@@ -12,7 +12,7 @@
   import_roles:
     name: common
     tasks_from: systemd
-    
+
 - name: COPY MONGO REPO FILE
   copy:
     src: mongo.repo
