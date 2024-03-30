@@ -1,12 +1,12 @@
-- name: NODE JS tasks
-  import_role:
-    name: common
-    tasks_from: node
-
 - name: app-setup
   import_role:
     name: common
     tasks_from: app-setup
+
+- name: NODE JS tasks
+  import_role:
+    name: common
+    tasks_from: node    
 
 - name: SYSTEM STARTED SERVICES
   import_role:

@@ -1,10 +1,10 @@
-- name: COPY CATALOGUE SERVICE FILE
+- name: COPY {{COMPONENT}} SERVICE FILE
   copy:
     src: "{{ COMPONENT }}.service"
     dest: /etc/systemd/system/{{ COMPONENT }}.service
-  notify: catalogue-updated  
+  notify: "{{COMPONENT}}-updated" 
 
-- name: START CATALOGUE SERVICE
+- name: START {{COMPONENT}} SERVICE
   ansible.builtin.systemd:
     name: "{{ COMPONENT }}"
     state: started

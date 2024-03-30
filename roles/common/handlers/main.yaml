@@ -1,8 +1,8 @@
-- name: catalogue-updated  
+- name: "{{COMPONENT}}-updated"   
   ansible.builtin.systemd:
     daemon_reexec: yes
 
-- name: catalogue-updated 
+- name: "{{COMPONENT}}-updated" 
   systemd:
     name: "{{ COMPONENT }}"
     state: restarted    
