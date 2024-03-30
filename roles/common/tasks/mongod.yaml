@@ -18,5 +18,17 @@
 
 - name: LOAD DATA INTO MONGODB
   shell: mongo --host mongo.gonepudirobot.online < /app/schema/{{ COMPONENT }}.js
-  when: product_count.stdout == "0" and COMPONENT == "catalogue"
+  when: product_count.stdout == "0" and COMPONENT == "user"
+
+- name: VERIFY PRODUCTS COUNT
+  command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB("users"); db.products.count()'
+  register: user_count
+
+- name: PRINT PRODUCT COUNT
+  debug:
+    msg: "user Count: {{ user_count.stdout }}" 
+
+- name: LOAD DATA INTO MONGODB
+  shell: mongo --host mongo.gonepudirobot.online < /app/schema/{{ COMPONENT }}.js
+  when: product_count.stdout == "0" and COMPONENT == "user"  
   
