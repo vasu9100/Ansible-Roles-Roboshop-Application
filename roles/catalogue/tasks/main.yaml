@@ -1,54 +1,18 @@
-- name: DISABLING NODE.JS MODULE
-  shell: "{{item}}"
-  loop:
-    - dnf module disable nodejs -y
-    - dnf module enable nodejs:18 -y
-    - dnf install nodejs -y
+- name: NODE JS tasks
+  import_roles:
+    name: common
+    tasks_from: nodejs
 
-- name: CONFIGURE APPLICATION USER
-  user:
-    name: roboshop
+- name: app-setup
+  import_roles:
+    name: common
+    tasks_from: app-setup
 
-- name: Create a directory if it does not exist
-  ansible.builtin.file:
-    path: /app
-    state: absent
-
-- name: CREATE APP DIRECTORY
-  file:
-    path: /app
-    state: directory
-
-- name: DOWNLOAD APPLICATION CODE INTO APP DIRECTORY
-  get_url:
-    url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
-    dest: /tmp
-
-- name: UNZIP APP CODE
-  unarchive:
-    src: /tmp/catalogue.zip
-    dest: /app
-    remote_src: yes
-
-- name: INSTALL NPM DEPENDENCIES
-  shell: npm install
-  args:
-    chdir: /app
-
-- name: COPY CATALOGUE SERVICE FILE
-  copy:
-    src: "{{ COMPONENT }}.service"
-    dest: /etc/systemd/system/{{ COMPONENT }}.service
-
-- name: RELOAD SYSTEMD DAEMON
-  ansible.builtin.systemd:
-    daemon_reexec: yes
-
-- name: START CATALOGUE SERVICE
-  ansible.builtin.systemd:
-    name: "{{ COMPONENT }}"
-    state: started
-
+- name: SYSTEM STARTED SERVICES
+  import_roles:
+    name: common
+    tasks_from: systemd
+    
 - name: COPY MONGO REPO FILE
   copy:
     src: mongo.repo
@@ -71,7 +35,3 @@
   shell: mongo --host mongo.gonepudirobot.online < /app/schema/{{ COMPONENT }}.js
   when: product_count.stdout == "0"
 
-- name: RESTART CATALOGUE SERVICE
-  systemd:
-    name: "{{ COMPONENT }}"
-    state: restarted

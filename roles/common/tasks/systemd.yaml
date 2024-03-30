@@ -1,0 +1,18 @@
+- name: COPY CATALOGUE SERVICE FILE
+  copy:
+    src: "{{ COMPONENT }}.service"
+    dest: /etc/systemd/system/{{ COMPONENT }}.service
+
+- name: RELOAD SYSTEMD DAEMON
+  ansible.builtin.systemd:
+    daemon_reexec: yes
+
+- name: START CATALOGUE SERVICE
+  ansible.builtin.systemd:
+    name: "{{ COMPONENT }}"
+    state: started
+
+- name: RESTART CATALOGUE SERVICE
+  systemd:
+    name: "{{ COMPONENT }}"
+    state: restarted    
