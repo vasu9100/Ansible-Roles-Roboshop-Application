@@ -43,8 +43,5 @@
   copy:
     src: roboshop.conf
     dest: /etc/nginx/default.d/roboshop.conf
+  notify: Restart NGINX  
 
-- name: Restart NGINX Server
-  service:
-    name: nginx
-    state: restarted
