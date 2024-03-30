@@ -15,5 +15,5 @@
 
 - name: MONOGO TASKS
   import_role:
-    - name: common
+      name: common
       tasks_from: mongod    
