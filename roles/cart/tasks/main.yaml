@@ -3,21 +3,12 @@
     name: common
     tasks_from: app-setup
 
-- name: COPY CART SERVICE FILE
-  copy:
-    src: "{{ COMPONENT }}.service"
-    dest: /etc/systemd/system/{{ COMPONENT }}.service
+- name: NODE-JS TASKS
+  import_role:
+    name: common
+    tasks_from: node
 
-- name: RELOAD SYSTEMD DAEMON
-  ansible.builtin.systemd:
-    daemon_reexec: yes
-
-- name: START cart SERVICE
-  ansible.builtin.systemd:
-    name: "{{ COMPONENT }}"
-    state: started
-
-- name: RESTART CART SERVICE
-  systemd:
-    name: "{{ COMPONENT }}"
-    state: restarted
+- name: SYSTEM START
+  import_role: 
+    name: common
+    tasks_from: systemd
