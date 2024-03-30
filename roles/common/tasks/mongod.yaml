@@ -14,8 +14,7 @@
 
 - name: PRINT PRODUCT COUNT
   debug:
-    msg: "Product Count: {{ product_count.stdout }}"
-  when: COMPONENT == catalogue  
+    msg: "Product Count: {{ product_count.stdout }}" 
 
 - name: LOAD DATA INTO MONGODB
   shell: mongo --host mongo.gonepudirobot.online < /app/schema/{{ COMPONENT }}.js
