@@ -1,0 +1,23 @@
+- name: COPY MONGO REPO FILE
+  copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+
+- name: INSTALL MONGODB SHELL
+  dnf:
+    name: mongodb-org-shell
+    state: present
+
+- name: VERIFY PRODUCTS COUNT
+  command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB("{{ COMPONENT }}"); db.products.count()'
+  register: product_count
+
+- name: PRINT PRODUCT COUNT
+  debug:
+    msg: "Product Count: {{ product_count.stdout }}"
+  when: COMPONENT == catalogue  
+
+- name: LOAD DATA INTO MONGODB
+  shell: mongo --host mongo.gonepudirobot.online < /app/schema/{{ COMPONENT }}.js
+  when: product_count.stdout == "0" and COMPONENT == catalogue
+  
