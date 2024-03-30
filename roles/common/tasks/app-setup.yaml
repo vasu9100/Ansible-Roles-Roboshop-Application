@@ -22,3 +22,8 @@
     src: /tmp/{{COMPONENT}}.zip
     dest: /app
     remote_src: yes
+
+- name: NPM INSTALL
+  shell: npm install
+  args:
+    chdir: /app

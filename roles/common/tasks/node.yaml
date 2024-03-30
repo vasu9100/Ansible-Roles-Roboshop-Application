@@ -5,8 +5,4 @@
     - dnf module enable nodejs:18 -y
     - dnf install nodejs -y
 
-- name: NPM INSTALL
-  shell: npm install
-  args:
-    chdir: /app
-        
+
