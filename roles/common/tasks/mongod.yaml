@@ -18,5 +18,5 @@
 
 - name: LOAD DATA INTO MONGODB
   shell: mongo --host mongo.gonepudirobot.online < /app/schema/{{ COMPONENT }}.js
-  when: product_count.stdout == "0" and COMPONENT == catalogue
+  when: product_count.stdout == "0" and COMPONENT == "catalogue"
   
